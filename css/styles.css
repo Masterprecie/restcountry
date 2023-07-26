@@ -18,7 +18,7 @@
   /*Typography*/
   --home-fs:14px;
   --about-fs:16px;
-  --ff:'Nunito', sans-serif;
+  --fontfamily:'Nunito', sans-serif;
 
   /* General Theming */
   --bg-color:hsl(207, 26%, 17%);
@@ -45,7 +45,7 @@ html {
 
 
 body{
-    font-family: var(--ff);
+    font-family: var(--fontfamily);
     font-size: var(--home-fs);
     background: var(--bg-color);
     color:var(--text-color);
