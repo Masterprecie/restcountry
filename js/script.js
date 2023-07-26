@@ -1,8 +1,8 @@
+//toggle light and dark mode
 const toggleIcon = document.getElementById('toggle-icon');
-const toggleDarkMode = document.getElementById('toggle-dark-mode')
+const toggleText = document.getElementById('toggle-text');
 
-
-//Theme Vars
+//light and dark mode themes
 const bgColor = '--bg-color';
 const txtColor = '--text-color';
 const elmntColor = '--elements-color';
@@ -10,22 +10,16 @@ const inptColor = '--input-color';
 const boxShadow = '--box-shadow';
 let darkMode = true;
 
-// const refresh = () => {
-// 	setTimeout(() => {
-// 		window.location.reload();
-// 	}, 20);
-// }
-
 //function that switch to light mode
-
 const lightModeFeature = () => {
 	document.documentElement.style.setProperty(bgColor, 'hsl(0, 0%, 98%)');
 	document.documentElement.style.setProperty(txtColor, 'hsl(200, 15%, 8%)');
 	document.documentElement.style.setProperty(elmntColor, 'hsl(0, 0%, 100%)');
 	document.documentElement.style.setProperty(inptColor, 'hsl(0, 0%, 52%)');
 	document.documentElement.style.setProperty(boxShadow, '0px 0px 2px 2px rgba(0, 0, 0, 0.2)');
-	toggleIcon.classList.remove('fas');
-	toggleIcon.classList.add('far');
+	toggleIcon.classList.remove('fas', 'fa-moon');
+	toggleIcon.classList.add('far', 'fa-sun');
+	toggleText.textContent = 'Light Mode';
 	localStorage.setItem('isDark', 'no');
 	darkMode = false;
 }
@@ -37,60 +31,61 @@ const darkModeFeature = () => {
 	document.documentElement.style.setProperty(elmntColor, 'hsl(209, 23%, 22%)');
 	document.documentElement.style.setProperty(inptColor, 'hsl(0, 0%, 100%)');
 	document.documentElement.style.setProperty(boxShadow, 'none');
-
-	toggleIcon.classList.remove('far');
-	toggleIcon.classList.add('fas');
+	toggleIcon.classList.remove('far', 'fa-sun');
+	toggleIcon.classList.add('fas', 'fa-moon');
+	toggleText.textContent = 'Dark Mode';
 	localStorage.setItem('isDark', 'yes');
 	darkMode = true;
 }
 
+// Initial darkMode value based on localStorage (if available)
+let storedMode = localStorage.getItem('isDark');
+if (storedMode !== null) {
+	darkMode = storedMode === 'yes';
+}
 
-//toggles to light and darkmode
+// Apply the initial mode styles and icons
+if (darkMode) {
+	darkModeFeature();
+} else {
+	lightModeFeature();
+}
 
-toggleDarkMode.addEventListener('click', e => {
+// Toggle mode when clicking on the text
+toggleText.addEventListener('click', () => {
 	darkMode ? lightModeFeature() : darkModeFeature();
-	// refresh()
-	e.preventDefault();
-})
+});
 
 
-
-//document load
+//When document is loaded
 document.addEventListener('DOMContentLoaded', () => {
-	//to check color theme
-	const isDark = localStorage.getItem('isDark');
-	(isDark === 'yes') ? lightModeFeature() : darkModeFeature();
 
 	//Render content to UI based ON page
 	const url = window.location.href.toString();
 	if (url.includes('singleCountry.html')) {
 
-		CountryPageInit()
+		InitializeCountryPage()
 
-		loadEventListeners()
+		CountyPageEvents()
 	}
 	else {
 
 		getAllCountries()
 
-		loadHomeEventListeners()
+		HomeFeatures()
 
 	}
-
-
-
 })
 
 
 
-const loadHomeEventListeners = () => {
+const HomeFeatures = () => {
 	//Dropdown toggle
 	const dropBtn = document.querySelector('.dropbtn');
 	const dropContent = document.querySelector('.dropdown-content');
 
 	dropBtn.addEventListener('click', e => {
 		dropContent.classList.toggle('show');
-		e.preventDefault();
 	})
 
 
@@ -111,20 +106,14 @@ const loadHomeEventListeners = () => {
 		}
 	})
 
-	//Dropdown for regions
+	//Dropdown for regions filter
 	const regions = document.querySelectorAll('.region');
 	regions.forEach(region => {
-
 		region.addEventListener('click', e => {
 			const value = e.target.innerHTML.toLowerCase();
-
 			getRegionCountries(value);
-
 			dropContent.classList.remove('show');
-
-			e.preventDefault();
 		})
-
 	});
 
 
@@ -149,11 +138,10 @@ const loadHomeEventListeners = () => {
 	const countries = document.querySelector('.countries');
 
 	countries.addEventListener('click', saveCountry);
-
 }
 
 //Event listener for single country page
-const loadEventListeners = () => {
+const CountyPageEvents = () => {
 	const backBtn = document.querySelector('.back-btn');
 
 	backBtn.addEventListener('click', () => {
@@ -164,7 +152,6 @@ const loadEventListeners = () => {
 	const saveCountry = (e) => {
 		if (e.target.classList.contains('country-btn')) {
 			const btn = e.target;
-
 			const countryCode = btn.value.toLowerCase();
 
 			//clear previous data
@@ -176,14 +163,10 @@ const loadEventListeners = () => {
 			const code = JSON.stringify(localStorage.getItem('country-code'));
 			//Get country by code
 			getCountryByCode(code);
-
-			//refresh page
-			refresh();
 		}
 	}
 
 	const country = document.querySelector('.country');
-
 	country.addEventListener('click', saveCountry);
 }
 
@@ -329,23 +312,14 @@ const displayCountry = country => {
 	}).join("")}    
 				</div>`
 		}
-			</div>`;
+		</div>`;
 
 }
 
 
 
+//API Calls
 
-
-
-
-
-
-
-
-
-
-//API REQUESTS 
 //Get all countries
 const getAllCountries = () => {
 	axios.get('https://restcountries.com/v3.1/all')
@@ -387,17 +361,13 @@ const getRegionCountries = (region) => {
 			displayCountries(countriesData);
 
 		}).catch(function (error) {
-
 			console.log(error);
 		})
 }
 
 
-
-
 //Get specific country (for Single country Page)
 const getCountry = (name) => {
-
 	axios.get(`https://restcountries.com/v3.1/name/${name}`)
 		.then(function (response) {
 			console.log(response);
@@ -414,7 +384,6 @@ const getCountry = (name) => {
 
 //Get specific country by code (for Country Single Page)
 const getCountryByCode = (code) => {
-
 	axios.get(`https://restcountries.com/v3.1/alpha/${code.replace(/\"/g, "")}`)
 		.then(function (response) {
 
@@ -429,7 +398,7 @@ const getCountryByCode = (code) => {
 }
 
 
-const CountryPageInit = () => {
+const InitializeCountryPage = () => {
 	console.log('Hello, this is the country page!!!');
 
 	try {
