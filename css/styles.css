@@ -1,7 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;600;800&display=swap');
 
-/* declare css variables to support light and dark mode */
+/* declaring css variables to support light and dark mode */
 
 :root{
    /* Dark Mode colors */
@@ -17,7 +17,6 @@
 
   /*Typography*/
   --home-fs:14px;
-  --about-fs:16px;
   --fontfamily:'Nunito', sans-serif;
 
   /* General Theming */
@@ -287,6 +286,8 @@ nav{
     transition: all .5s ease-in;
 }
 
+
+/* Media Queries */
 /* Tab View */
 @media(max-width:769px){
    
@@ -363,7 +364,7 @@ nav{
 }
 
 
-/* Media Queries */
+/* Mobile view */
 	@media(max-width:350px){
 		.nav-wrapper{
 			font-size: 10px;

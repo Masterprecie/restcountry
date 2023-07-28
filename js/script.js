@@ -58,28 +58,26 @@ toggleText.addEventListener('click', () => {
 
 
 //When document is loaded
+
 document.addEventListener('DOMContentLoaded', () => {
-
-	//Render content to UI based ON page
 	const url = window.location.href.toString();
+
+	// Display contents on the UI based on the current page
 	if (url.includes('singleCountry.html')) {
-
-		InitializeCountryPage()
-
-		CountyPageEvents()
+		// Actions specific to the single country page
+		initializeSingleCountryPage();
+		setupSingleCountryPageEvents();
+	} else {
+		// Actions for other pages
+		fetchAllCountries();
+		displayHomeFeatures();
 	}
-	else {
-
-		getAllCountries()
-
-		HomeFeatures()
-
-	}
-})
+});
 
 
 
-const HomeFeatures = () => {
+
+const displayHomeFeatures = () => {
 	//Dropdown toggle
 	const dropBtn = document.querySelector('.dropbtn');
 	const dropContent = document.querySelector('.dropdown-content');
@@ -141,7 +139,7 @@ const HomeFeatures = () => {
 }
 
 //Event listener for single country page
-const CountyPageEvents = () => {
+const setupSingleCountryPageEvents = () => {
 	const backBtn = document.querySelector('.back-btn');
 
 	backBtn.addEventListener('click', () => {
@@ -169,9 +167,6 @@ const CountyPageEvents = () => {
 	const country = document.querySelector('.country');
 	country.addEventListener('click', saveCountry);
 }
-
-
-
 
 
 //display all countries to the index page 
@@ -321,7 +316,7 @@ const displayCountry = country => {
 //API Calls
 
 //Get all countries
-const getAllCountries = () => {
+const fetchAllCountries = () => {
 	axios.get('https://restcountries.com/v3.1/all')
 		.then(function (response) {
 			console.log(response);
@@ -398,8 +393,8 @@ const getCountryByCode = (code) => {
 }
 
 
-const InitializeCountryPage = () => {
-	console.log('Hello, this is the country page!!!');
+const initializeSingleCountryPage = () => {
+	// console.log('This is the country page');
 
 	try {
 		// Retrieve data from localStorage
@@ -417,7 +412,6 @@ const InitializeCountryPage = () => {
 		}
 	} catch (error) {
 		console.error('Error occurred during country page initialization:', error);
-		// Handle the error appropriately (e.g., show an error message to the user)
 	}
 };
 
