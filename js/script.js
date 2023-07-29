@@ -89,20 +89,14 @@ const displayHomeFeatures = () => {
 
 	//Search Feature
 	// Get the input field
+
 	const searchInput = document.getElementById("search-input");
-
 	searchInput.addEventListener('keyup', e => {
-		if (e.key === 'Enter') {
+		const value = e.target.value.toLowerCase();
+		getSpecificCountry(value);
+		e.preventDefault();
+	});
 
-			const value = e.target.value.toLowerCase();
-
-			getSpecificCountry(value);
-
-			e.target.value = '';
-
-			e.preventDefault();
-		}
-	})
 
 	//Dropdown for regions filter
 	const regions = document.querySelectorAll('.region');
