@@ -304,7 +304,9 @@ nav{
     nav{
         height: 6rem;   
     }
-
+    .nav{    
+        margin: 0 1rem;    
+    }
     .nav-wrapper{
         font-size: 12px;
         margin: 0 2rem;
